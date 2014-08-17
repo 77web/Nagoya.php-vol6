@@ -9,7 +9,7 @@
     "license": "BSD-3-Clause",
     "autoload":{
         "psr-4":{
-            "Nagoya\\Nagoya\\": "src/"
+            "Nagoya\\": "src/"
         }
     },
     "require-dev": {
