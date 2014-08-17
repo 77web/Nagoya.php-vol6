@@ -14,7 +14,7 @@ class Lesson
     private $day;
 
     /**
-     * @var array
+     * @var Staff[]
      *
      * 受講する社員リスト
      */
@@ -82,6 +82,18 @@ class Lesson
     public function addMember(Staff $staff)
     {
         $this->members[] = $staff;
+
+        return $this;
+    }
+
+    public function removeMember(Staff $staff)
+    {
+        foreach ($this->members as $key => $member) {
+            if ($member->getId() == $staff->getId()) {
+                unset($this->members[$key]);
+                break;
+            }
+        }
 
         return $this;
     }

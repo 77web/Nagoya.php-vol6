@@ -63,10 +63,13 @@ class Staff
     }
 
     /**
+     * 特定の曜日に対する希望順位を返す
+     *
+     * @param int $day
      * @return int
      */
-    public function getFirstRequest()
+    public function getRequestRankForDay($day)
     {
-        return reset($this->classDayRequests);
+        return array_search($day, $this->classDayRequests) + 1;
     }
 }

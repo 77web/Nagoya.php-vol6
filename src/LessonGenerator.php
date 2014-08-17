@@ -5,6 +5,7 @@ namespace Nagoya;
 
 
 use Nagoya\Data\Lesson;
+use Nagoya\Data\Staff;
 
 class LessonGenerator
 {
@@ -34,14 +35,7 @@ class LessonGenerator
         // 社員をクラスに割り振る
         // 社員は応募順に並べられている
         foreach ($staffs as $staff) {
-            foreach ($staff->getClassDayRequests() as $day) {
-                // 希望順にクラスの空きを見て行き、空きがあればその時点でクラスに参加させる
-                // TODO $lessonの特定をRepositoryとかに任せる
-                if (!$lessons[$day]->isFull()) {
-                    $lessons[$day]->addMember($staff);
-                    break;
-                }
-            }
+            $this->assignStaffToLesson($staff, $lessons);
         }
 
         // 受講生のいない枠を削除
@@ -66,5 +60,43 @@ class LessonGenerator
         }
 
         return $lessons;
+    }
+
+    /**
+     * @param Staff $staff
+     * @param Lesson[] $lessons
+     */
+    private function assignStaffToLesson(Staff $staff, array $lessons)
+    {
+        // 希望順に各曜日の空きを見て行き、空きがあればその時点でクラスに参加させる
+        foreach ($staff->getClassDayRequests() as $day) {
+            // TODO クラスの特定方法をRepositoryとかに任せる
+            $lesson = $lessons[$day];
+
+            if (!$lesson->isFull()) {
+                $lesson->addMember($staff);
+                break;
+            } else {
+                // 実行時点で一番希望順位が低い社員を見つける
+                $minimumPriorityMember = null;
+                foreach ($lesson->getMembers() as $member) {
+                    /** @var Staff $minimumPriorityMember */
+                    if (null === $minimumPriorityMember || $member->getRequestRankForDay($day) > $minimumPriorityMember->getRequestRankForDay($day)) {
+                        $minimumPriorityMember = $member;
+                    }
+                }
+
+                // 一番希望順位が低い社員が現在アサイン実行中の社員より希望順位が低ければ追い出して再アサイン
+                if ($minimumPriorityMember->getRequestRankForDay($day) > $staff->getRequestRankForDay($day)) {
+                    $lesson
+                        ->addMember($staff)
+                        ->removeMember($minimumPriorityMember)
+                    ;
+
+                    $this->assignStaffToLesson($minimumPriorityMember, $lessons);
+                    break;
+                }
+            }
+        }
     }
 }
