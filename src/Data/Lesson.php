@@ -59,7 +59,7 @@ class Lesson
     }
 
     /**
-     * @return array
+     * @return Staff[]
      */
     public function getMembers()
     {

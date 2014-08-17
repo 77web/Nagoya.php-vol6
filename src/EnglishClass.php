@@ -3,6 +3,7 @@
 namespace Nagoya;
 
 use Nagoya\Util\InputParser;
+use Nagoya\Util\OutputFormatter;
 
 class EnglishClass
 {
@@ -16,10 +17,16 @@ class EnglishClass
      */
     private $lessonGenerator;
 
-    public function __construct(InputParser $inputParser, LessonGenerator $lessonGenerator)
+    /**
+     * @var OutputFormatter
+     */
+    private $outputFormatter;
+
+    public function __construct(InputParser $inputParser, LessonGenerator $lessonGenerator, OutputFormatter $outputFormatter)
     {
         $this->inputParser = $inputParser;
         $this->lessonGenerator = $lessonGenerator;
+        $this->outputFormatter = $outputFormatter;
     }
 
     /**
@@ -35,7 +42,8 @@ class EnglishClass
         $lessons = $this->lessonGenerator->generate($staffs);
 
         // 出力を整える
-        // $output = $this->outputFormatter->format($lessons);
-        // return $output;
+        $output = $this->outputFormatter->format($lessons);
+
+        return $output;
     }
 }

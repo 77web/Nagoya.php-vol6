@@ -3,6 +3,7 @@
 namespace Nagoya;
 
 use Nagoya\Util\InputParser;
+use Nagoya\Util\OutputFormatter;
 
 class EnglishClassTest extends \PHPUnit_Framework_TestCase
 {
@@ -16,11 +17,12 @@ class EnglishClassTest extends \PHPUnit_Framework_TestCase
     {
         $inputParser = new InputParser();
         $lessonGenerator = new LessonGenerator([1, 2, 3, 4, 5]);
+        $outputFormatter = new OutputFormatter();
 
-        $englishClass = new EnglishClass($inputParser, $lessonGenerator);
+        $englishClass = new EnglishClass($inputParser, $lessonGenerator, $outputFormatter);
         $output = $englishClass->run($input);
 
-        // $this->assertEquals($expectedOutput, $output);
+        $this->assertEquals($expectedOutput, $output);
     }
 
     /**
@@ -42,8 +44,9 @@ class EnglishClassTest extends \PHPUnit_Framework_TestCase
         $lesson1 = $this->getMockBuilder('\Nagoya\Data\Lesson')->disableOriginalConstructor()->getMock();
         $inputParser = $this->getMock('\Nagoya\Util\InputParser');
         $lessonGenerator = $this->getMock('\Nagoya\LessonGenerator');
+        $outputFormatter = $this->getMock('\Nagoya\Util\OutputFormatter');
         $input = '1_12345';
-        $expectedOutput = '1_1';
+        $output = $expectedOutput = '1_1';
 
         $inputParser
             ->expects($this->once())
@@ -57,10 +60,16 @@ class EnglishClassTest extends \PHPUnit_Framework_TestCase
             ->with($this->equalTo([$staff1]))
             ->will($this->returnValue([$lesson1]))
         ;
+        $outputFormatter
+            ->expects($this->once())
+            ->method('format')
+            ->with($this->equalTo([$lesson1]))
+            ->will($this->returnValue($output))
+        ;
 
-        $englishClass = new EnglishClass($inputParser, $lessonGenerator);
+        $englishClass = new EnglishClass($inputParser, $lessonGenerator, $outputFormatter);
         $output = $englishClass->run($input);
 
-        // $this->assertEquals($expectedOutput, $output);
+        $this->assertEquals($expectedOutput, $output);
     }
 }
