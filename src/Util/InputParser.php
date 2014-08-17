@@ -33,7 +33,7 @@ class InputParser
     {
         $days = [];
         for ($i = 0; $i < strlen($requests); $i++) {
-            $days[] = $requests[$i];
+            $days[] = intval($requests[$i]);
         }
 
         return $days;

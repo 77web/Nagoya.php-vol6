@@ -77,11 +77,11 @@ class LessonGenerator
                 $lesson->addMember($staff);
                 break;
             } else {
-                // 実行時点で一番希望順位が低い社員を見つける
+                // 実行時点で一番希望順位が低い社員を見つける。同じ希望順なら応募順が後の方を低いと見なす
                 $minimumPriorityMember = null;
                 foreach ($lesson->getMembers() as $member) {
                     /** @var Staff $minimumPriorityMember */
-                    if (null === $minimumPriorityMember || $member->getRequestRankForDay($day) > $minimumPriorityMember->getRequestRankForDay($day)) {
+                    if (null === $minimumPriorityMember || $member->getRequestRankForDay($day) >= $minimumPriorityMember->getRequestRankForDay($day)) {
                         $minimumPriorityMember = $member;
                     }
                 }

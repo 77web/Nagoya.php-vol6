@@ -57,13 +57,14 @@ class LessonGeneratorTest extends \PHPUnit_Framework_TestCase
             $staffs[] = $this->makeStaffMock($i, [1,2]);
         }
         $staffs[] = $this->makeStaffMock(3, [2, 1]);
+        $staffs[] = $this->makeStaffMock(4, [2, 1]);
 
         $lessonGenerator = new LessonGenerator([1,2], 1);
         $lessons = $lessonGenerator->generate($staffs);
 
         $this->assertEquals(2, count($lessons));
 
-        // 社員1が曜日1 社員3が曜日2に割り振られ、社員2はお断り
+        // 社員1が曜日1 社員3が曜日2に割り振られ、社員2（希望順で社員3に負ける）,社員4（応募順で社員3に負ける）はお断り
         $membersFor1 = $lessons[1]->getMembers();
         $this->assertEquals(1, count($membersFor1));
         $memberFor1 = reset($membersFor1);

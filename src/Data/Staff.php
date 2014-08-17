@@ -70,6 +70,6 @@ class Staff
      */
     public function getRequestRankForDay($day)
     {
-        return array_search($day, $this->classDayRequests) + 1;
+        return intval(array_search($day, $this->classDayRequests)) + 1;
     }
 }
