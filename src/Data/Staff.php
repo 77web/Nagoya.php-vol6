@@ -61,4 +61,12 @@ class Staff
     {
         return $this->id;
     }
+
+    /**
+     * @return int
+     */
+    public function getFirstRequest()
+    {
+        return reset($this->classDayRequests);
+    }
 }
