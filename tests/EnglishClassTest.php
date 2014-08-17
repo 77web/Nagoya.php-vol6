@@ -32,6 +32,8 @@ class EnglishClassTest extends \PHPUnit_Framework_TestCase
     {
         return [
             ['1_12345', '1_1'],
+            ['30_32451', '3_30'],
+            ['1_12345|2_12345', '1_1:2']
         ];
     }
 
