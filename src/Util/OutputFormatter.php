@@ -18,6 +18,7 @@ class OutputFormatter
             foreach ($lesson->getMembers() as $staff) {
                 $staffIds[] = $staff->getId();
             }
+            sort($staffIds);
 
             $outputs[] = sprintf('%d_%s', $lesson->getDay(), implode(':', $staffIds));
         }

@@ -25,7 +25,7 @@ class OutputFormatterTest extends \PHPUnit_Framework_TestCase
     {
         $lesson1 = $this->makeLessonMock(1, [1]);
         $lesson2 = $this->makeLessonMock(1, [1]);
-        $lesson3 = $this->makeLessonMock(2, [2, 3]);
+        $lesson3 = $this->makeLessonMock(2, [3, 2]);
 
         return [
             [[$lesson1], '1_1'],
