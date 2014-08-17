@@ -2,8 +2,20 @@
 
 namespace Nagoya;
 
+use Nagoya\Util\InputParser;
+
 class EnglishClass
 {
+    /**
+     * @var Util\InputParser
+     */
+    private $inputParser;
+
+    public function __construct(InputParser $inputParser)
+    {
+        $this->inputParser = $inputParser;
+    }
+
     /**
      * @param string $input
      * @return string
