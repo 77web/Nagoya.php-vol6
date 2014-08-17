@@ -35,15 +35,15 @@ class OutputFormatterTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param int $day
-     * @param array $staffIds
+     * @param array $entryIds
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
-    private function makeLessonMock($day, $staffIds)
+    private function makeLessonMock($day, $entryIds)
     {
         $lesson = $this->getMockBuilder('\Nagoya\Data\Lesson')->disableOriginalConstructor()->getMock();
         $members = [];
-        foreach ($staffIds as $staffId) {
-            $members[] = $this->makeStaffMock($staffId);
+        foreach ($entryIds as $entryId) {
+            $members[] = $this->makeEntryMock($entryId);
         }
 
         $lesson
@@ -61,18 +61,18 @@ class OutputFormatterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param int $id
+     * @param int $entryId
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
-    private function makeStaffMock($id)
+    private function makeEntryMock($entryId)
     {
-        $staff = $this->getMockBuilder('\Nagoya\Data\Staff')->disableOriginalConstructor()->getMock();
-        $staff
+        $entry = $this->getMockBuilder('\Nagoya\Data\Entry')->disableOriginalConstructor()->getMock();
+        $entry
             ->expects($this->once())
-            ->method('getId')
-            ->will($this->returnValue($id))
+            ->method('getStaffId')
+            ->will($this->returnValue($entryId))
         ;
 
-        return $staff;
+        return $entry;
     }
 }

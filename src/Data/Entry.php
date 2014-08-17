@@ -4,12 +4,21 @@
 namespace Nagoya\Data;
 
 
-class Staff
+class Entry
 {
     /**
      * @var int
+     *
+     * 社員番号
      */
-    private $id;
+    private $staffId;
+
+    /**
+     * @var int
+     *
+     * 申し込み受付順
+     */
+    private $requestOrder;
 
     /**
      * @var array
@@ -18,15 +27,17 @@ class Staff
 
     /**
      * @param int $id
+     * @param int $requestOrder
      */
-    public function __construct($id)
+    public function __construct($id, $requestOrder)
     {
-        $this->id = $id;
+        $this->staffId = $id;
+        $this->requestOrder = $requestOrder;
     }
 
     /**
      * @param array $classDayRequests
-     * @return Staff
+     * @return Entry
      */
     public function setClassDayRequests($classDayRequests)
     {
@@ -45,11 +56,11 @@ class Staff
 
     /**
      * @param int $id
-     * @return Staff
+     * @return Entry
      */
-    public function setId($id)
+    public function setStaffId($id)
     {
-        $this->id = $id;
+        $this->staffId = $id;
 
         return $this;
     }
@@ -57,9 +68,28 @@ class Staff
     /**
      * @return int
      */
-    public function getId()
+    public function getStaffId()
     {
-        return $this->id;
+        return $this->staffId;
+    }
+
+    /**
+     * @param int $requestOrder
+     * @return Entry
+     */
+    public function setRequestOrder($requestOrder)
+    {
+        $this->requestOrder = $requestOrder;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getRequestOrder()
+    {
+        return $this->requestOrder;
     }
 
     /**

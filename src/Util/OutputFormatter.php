@@ -15,8 +15,8 @@ class OutputFormatter
         $outputs = [];
         foreach ($lessons as $lesson) {
             $staffIds = [];
-            foreach ($lesson->getMembers() as $staff) {
-                $staffIds[] = $staff->getId();
+            foreach ($lesson->getMembers() as $entry) {
+                $staffIds[] = $entry->getStaffId();
             }
             sort($staffIds);
 

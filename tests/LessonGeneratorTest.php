@@ -8,13 +8,13 @@ class LessonGeneratorTest extends \PHPUnit_Framework_TestCase
 {
     public function test_generate()
     {
-        $staff1 = $this->makeStaffMock(1, [2, 1]);
-        $staff2 = $this->makeStaffMock(2, [2]);
+        $entry1 = $this->makeEntryMock(1, 1, [2, 1]);
+        $entry2 = $this->makeEntryMock(2, 2, [2]);
         $days = [1, 2];
-        $staffs = [$staff1, $staff2];
+        $entries = [$entry1, $entry2];
 
         $lessonGenerator = new LessonGenerator($days, 4);
-        $lessons = $lessonGenerator->generate($staffs);
+        $lessons = $lessonGenerator->generate($entries);
 
         $this->assertInternalType('array', $lessons);
         $this->assertEquals(1, count($lessons));
@@ -29,13 +29,13 @@ class LessonGeneratorTest extends \PHPUnit_Framework_TestCase
      */
     public function generate_第一希望順で定員オーバーが発生した場合の割り振り()
     {
-        $staffs = [];
+        $entries = [];
         for ($i = 1; $i <= 3; $i++) {
-            $staffs[] = $this->makeStaffMock($i, [1,2]);
+            $entries[] = $this->makeEntryMock($i, $i - 1, [1,2]);
         }
 
         $lessonGenerator = new LessonGenerator([1,2], 1);
-        $lessons = $lessonGenerator->generate($staffs);
+        $lessons = $lessonGenerator->generate($entries);
 
         $this->assertEquals(2, count($lessons));
 
@@ -43,7 +43,7 @@ class LessonGeneratorTest extends \PHPUnit_Framework_TestCase
         for ($i = 1; $i <= 2; $i++) {
             $members = $lessons[$i]->getMembers();
             $this->assertEquals(1, count($members));
-            $this->assertEquals($i, $members[0]->getId());
+            $this->assertEquals($i, $members[0]->getStaffId());
         }
     }
 
@@ -52,15 +52,15 @@ class LessonGeneratorTest extends \PHPUnit_Framework_TestCase
      */
     public function generate_追い出しが発生する場合()
     {
-        $staffs = [];
+        $entries = [];
         for ($i = 1; $i <= 2; $i++) {
-            $staffs[] = $this->makeStaffMock($i, [1,2]);
+            $entries[] = $this->makeEntryMock($i, $i - 1, [1,2]);
         }
-        $staffs[] = $this->makeStaffMock(3, [2, 1]);
-        $staffs[] = $this->makeStaffMock(4, [2, 1]);
+        $entries[] = $this->makeEntryMock(3, 2, [2, 1]);
+        $entries[] = $this->makeEntryMock(4, 3, [2, 1]);
 
         $lessonGenerator = new LessonGenerator([1,2], 1);
-        $lessons = $lessonGenerator->generate($staffs);
+        $lessons = $lessonGenerator->generate($entries);
 
         $this->assertEquals(2, count($lessons));
 
@@ -68,33 +68,39 @@ class LessonGeneratorTest extends \PHPUnit_Framework_TestCase
         $membersFor1 = $lessons[1]->getMembers();
         $this->assertEquals(1, count($membersFor1));
         $memberFor1 = reset($membersFor1);
-        $this->assertEquals(1, $memberFor1->getId());
+        $this->assertEquals(1, $memberFor1->getStaffId());
 
         $membersFor2 = $lessons[2]->getMembers();
         $this->assertEquals(1, count($membersFor2));
         $memberFor2 = reset($membersFor2);
-        $this->assertEquals(3, $memberFor2->getId());
+        $this->assertEquals(3, $memberFor2->getStaffId());
     }
 
     /**
      * @param int $id
+     * @param int $order
      * @param array $requestDays
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
-    private function makeStaffMock($id, $requestDays)
+    private function makeEntryMock($id, $order, $requestDays)
     {
-        $staff = $this->getMockBuilder('\Nagoya\Data\Staff')->disableOriginalConstructor()->getMock();
-        $staff
+        $entry = $this->getMockBuilder('\Nagoya\Data\Entry')->disableOriginalConstructor()->getMock();
+        $entry
             ->expects($this->any())
-            ->method('getId')
+            ->method('getStaffId')
             ->will($this->returnValue($id))
         ;
-        $staff
+        $entry
+            ->expects($this->any())
+            ->method('getRequestOrder')
+            ->will($this->returnValue($order))
+        ;
+        $entry
             ->expects($this->any())
             ->method('getClassDayRequests')
             ->will($this->returnValue($requestDays))
         ;
-        $staff
+        $entry
             ->expects($this->any())
             ->method('getRequestRankForDay')
             ->will($this->returnCallback(function($day) use ($requestDays){
@@ -104,6 +110,6 @@ class LessonGeneratorTest extends \PHPUnit_Framework_TestCase
             }))
         ;
 
-        return $staff;
+        return $entry;
     }
 }

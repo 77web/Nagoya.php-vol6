@@ -36,10 +36,10 @@ class EnglishClass
     public function run($input)
     {
         // 入力文字列をStaffの配列に変換する
-        $staffs = $this->inputParser->convertToStaffs($input);
+        $entries = $this->inputParser->convertToEntries($input);
 
         // 割り振りを行う
-        $lessons = $this->lessonGenerator->generate($staffs);
+        $lessons = $this->lessonGenerator->generate($entries);
 
         // 出力を整える
         $output = $this->outputFormatter->format($lessons);

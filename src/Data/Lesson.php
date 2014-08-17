@@ -14,7 +14,7 @@ class Lesson
     private $day;
 
     /**
-     * @var Staff[]
+     * @var Entry[]
      *
      * 受講する社員リスト
      */
@@ -68,7 +68,7 @@ class Lesson
     }
 
     /**
-     * @return Staff[]
+     * @return Entry[]
      */
     public function getMembers()
     {
@@ -76,20 +76,20 @@ class Lesson
     }
 
     /**
-     * @param Staff $staff
+     * @param Entry $entry
      * @return $this
      */
-    public function addMember(Staff $staff)
+    public function addMember(Entry $entry)
     {
-        $this->members[] = $staff;
+        $this->members[] = $entry;
 
         return $this;
     }
 
-    public function removeMember(Staff $staff)
+    public function removeMember(Entry $entry)
     {
         foreach ($this->members as $key => $member) {
-            if ($member->getId() == $staff->getId()) {
+            if ($member->getStaffId() == $entry->getStaffId()) {
                 unset($this->members[$key]);
                 break;
             }

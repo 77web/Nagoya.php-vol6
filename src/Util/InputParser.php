@@ -3,26 +3,26 @@
 
 namespace Nagoya\Util;
 
-use Nagoya\Data\Staff;
+use Nagoya\Data\Entry;
 
 class InputParser
 {
     /**
      * @param string $inputs
-     * @return Staff[]
+     * @return Entry[]
      */
-    public function convertToStaffs($inputs)
+    public function convertToEntries($inputs)
     {
-        $staffs = [];
-        foreach (explode('|', $inputs) as $input) {
-            list($id, $requests) = explode('_', $input);
-            $staff = new Staff($id);
-            $staff->setClassDayRequests($this->convertRequests($requests));
+        $entries = [];
+        foreach (explode('|', $inputs) as $order => $input) {
+            list($entryId, $requests) = explode('_', $input);
+            $entry = new Entry($entryId, $order);
+            $entry->setClassDayRequests($this->convertRequests($requests));
 
-            $staffs[] = $staff;
+            $entries[] = $entry;
         }
 
-        return $staffs;
+        return $entries;
     }
 
     /**

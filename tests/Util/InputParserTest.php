@@ -3,7 +3,7 @@
 
 namespace Nagoya\Util;
 
-use Nagoya\Data\Staff;
+use Nagoya\Data\Entry;
 
 class InputParserTest extends \PHPUnit_Framework_TestCase 
 {
@@ -11,14 +11,15 @@ class InputParserTest extends \PHPUnit_Framework_TestCase
      * @test
      * @dataProvider provideTestData
      */
-    public function test_convertToStaffs($input, $size, Staff $expectedStaff1)
+    public function test_convertToEntries($input, $size, Entry $expectedEntry1)
     {
         $inputParser = new InputParser();
-        $staffs = $inputParser->convertToStaffs($input);
+        $entries = $inputParser->convertToEntries($input);
 
-        $this->assertInternalType('array', $staffs);
-        $this->assertEquals($size, count($staffs));
-        $this->assertEquals($expectedStaff1, $staffs[0]);
+        $this->assertInternalType('array', $entries);
+        $this->assertEquals($size, count($entries));
+        $this->assertInstanceOf('\Nagoya\Data\Entry', $entries[0]);
+        $this->assertEquals($expectedEntry1->getStaffId(), $entries[0]->getStaffId());
     }
 
     /**
@@ -26,7 +27,7 @@ class InputParserTest extends \PHPUnit_Framework_TestCase
      */
     public function provideTestData()
     {
-        $staff1 = new Staff(1);
+        $staff1 = new Entry(1, 1);
         $staff1->setClassDayRequests([1,2,3,4,5]);
 
         return [
