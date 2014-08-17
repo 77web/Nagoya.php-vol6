@@ -21,11 +21,20 @@ class Lesson
     private $members;
 
     /**
-     * @param int $day
+     * @var int
+     *
+     * 受講生の定員
      */
-    public function __construct($day)
+    private $memberLimit;
+
+    /**
+     * @param int $day
+     * @param int $memberLimit
+     */
+    public function __construct($day, $memberLimit)
     {
         $this->day = $day;
+        $this->memberLimit = $memberLimit;
     }
 
     /**
@@ -75,5 +84,13 @@ class Lesson
         $this->members[] = $staff;
 
         return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isFull()
+    {
+        return count($this->members) >= $this->memberLimit;
     }
 }

@@ -15,10 +15,12 @@ class LessonGenerator
 
     /**
      * @param array $days
+     * @param int $memberLimit
      */
-    public function __construct(array $days = [])
+    public function __construct(array $days = [], $memberLimit)
     {
         $this->lessonDays = $days;
+        $this->memberLimit = $memberLimit;
     }
 
     /**
@@ -30,12 +32,16 @@ class LessonGenerator
         $lessons = $this->initializeLessons();
 
         // 社員をクラスに割り振る
+        // 社員は応募順に並べられている
         foreach ($staffs as $staff) {
-            /// TODO 希望順・応募順・定員を考慮する
-            $day = $staff->getFirstRequest();
-
-            // TODO $lessonの特定をRepositoryに任せる
-            $lessons[$day]->addMember($staff);
+            foreach ($staff->getClassDayRequests() as $day) {
+                // 希望順にクラスの空きを見て行き、空きがあればその時点でクラスに参加させる
+                // TODO $lessonの特定をRepositoryとかに任せる
+                if (!$lessons[$day]->isFull()) {
+                    $lessons[$day]->addMember($staff);
+                    break;
+                }
+            }
         }
 
         // 受講生のいない枠を削除
@@ -56,7 +62,7 @@ class LessonGenerator
     {
         $lessons = [];
         foreach ($this->lessonDays as $day) {
-            $lessons[$day] = new Lesson($day);
+            $lessons[$day] = new Lesson($day, $this->memberLimit);
         }
 
         return $lessons;

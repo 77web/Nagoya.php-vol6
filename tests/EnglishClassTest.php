@@ -16,7 +16,7 @@ class EnglishClassTest extends \PHPUnit_Framework_TestCase
     public function test_actual_run($input, $expectedOutput)
     {
         $inputParser = new InputParser();
-        $lessonGenerator = new LessonGenerator([1, 2, 3, 4, 5]);
+        $lessonGenerator = new LessonGenerator([1, 2, 3, 4, 5], 4);
         $outputFormatter = new OutputFormatter();
 
         $englishClass = new EnglishClass($inputParser, $lessonGenerator, $outputFormatter);
@@ -48,7 +48,7 @@ class EnglishClassTest extends \PHPUnit_Framework_TestCase
         $staff1 = $this->getMockBuilder('\Nagoya\Data\Staff')->disableOriginalConstructor()->getMock();
         $lesson1 = $this->getMockBuilder('\Nagoya\Data\Lesson')->disableOriginalConstructor()->getMock();
         $inputParser = $this->getMock('\Nagoya\Util\InputParser');
-        $lessonGenerator = $this->getMock('\Nagoya\LessonGenerator');
+        $lessonGenerator = $this->getMockBuilder('\Nagoya\LessonGenerator')->disableOriginalConstructor()->getMock();
         $outputFormatter = $this->getMock('\Nagoya\Util\OutputFormatter');
         $input = '1_12345';
         $output = $expectedOutput = '1_1';
